@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Library code:</b>
+  <%= @calculation.library_code %>
+</p>
+
+<p>
+  <b>Call num start:</b>
+  <%= @calculation.call_num_start %>
+</p>
+
+<p>
+  <b>Call num end:</b>
+  <%= @calculation.call_num_end %>
+</p>
+
+<p>
+  <b>Travel time:</b>
+  <%= @calculation.travel_time %>
+</p>
+
+<p>
+  <b>Result:</b>
+  <%= link_to 'Result', calculation_result_path(@calculation) %>
+</p>
+
+
+<%= link_to 'Edit', edit_calculation_path(@calculation) %> |
+<%= link_to 'Back', calculations_path %>
