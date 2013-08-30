@@ -1,4 +1,4 @@
-<%= form_for(@calculation) do |f| %>
+<%= form_for(@calculation, html: { class: 'form-horizontal'} ) do |f| %>
   <% if @calculation.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@calculation.errors.count, "error") %> prohibited this calculation from being saved:</h2>
@@ -11,23 +11,37 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :library_code %><br />
-    <%= f.text_field :library_code %>
+  <div class="form-group">
+    <%= f.label :library_code, class: 'col-md-2 control-label' %>
+    <div class="col-md-10">
+        <%= f.text_field :library_code, class: 'form-control' %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :call_num_start %><br />
-    <%= f.text_field :call_num_start %>
+  <div class="form-group">
+    <%= f.label :collection_code, class: 'col-md-2 control-label' %>
+    <div class="col-md-10">
+        <%= f.text_field :collection_code, class: 'form-control' %>
+</div>
   </div>
-  <div class="field">
-    <%= f.label :call_num_end %><br />
-    <%= f.text_field :call_num_end %>
+  <div class="form-group">
+    <%= f.label :call_num_start, class: 'col-md-2 control-label' %>
+    <div class="col-md-10">
+        <%= f.text_field :call_num_start, class: 'form-control' %>
+</div>
   </div>
-  <div class="field">
-    <%= f.label :travel_time %><br />
-    <%= f.number_field :travel_time %>
+  <div class="form-group">
+    <%= f.label :call_num_end, class: 'col-md-2 control-label' %>
+    <div class="col-md-10">
+        <%= f.text_field :call_num_end, class: 'form-control' %>
+</div>
+  </div>
+  <div class="form-group">
+    <%= f.label :travel_time, class: 'col-md-2 control-label' %>
+    <div class="col-md-10">
+        <%= f.number_field :travel_time, class: 'form-control' %>
+</div>
   </div>
   <div class="actions">
-    <%= f.submit %>
+      <%= f.submit 'Calculate', class: 'btn btn-primary' %>
   </div>
 <% end %>

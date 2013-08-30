@@ -1,43 +1,52 @@
-<h1>Results#show</h1>
+<h1>Results</h1>
+
+<h2>Input</h2>
+<dl class="dl-horizontal">
+    <dt>Library code</dt><dd><%= @calculation.library_code %></dd>
+    <dt>Collection code</dt><dd><%= @calculation.collection_code %></dd>
+    <dt>Call num start</dt><dd><%= @calculation.call_num_start %></dd>
+    <dt>Call num end</dt><dd><%= @calculation.call_num_end %></dd>
+    <dt>Travel time</dt><dd><%= @calculation.travel_time %></dd>
+</dl>
 
 <h2>Measurements</h2>
-<div>
+<dl class="dl-horizontal">
     <dt>Total Records</dt><dd><%= @result.total_records %></dd>
     <dt>Total Books</dt><dd><%= @result.pages.count %></dd>
     <dt>Total Serials</dt><dd><%= @result.serials.count %></dd>
     <dt>Total Multi-volume works</dt><dd><%= @result.multi_volumes.count %></dd>
     <dt>Total Pages</dt><dd><%= @result.total_pages %></dd>
     <dt>Records without pages</dt><dd><%= @result.records_without_pages %></dd>
-</div>
+</dl>
 
 <h2>Derived Stats</h2>
-<div>
+<dl class="dl-horizontal">
     <dt>Total page width</dt>
-    <dd><%= @result.pages_to_cm %>cm</dd>
+    <dd><%= @result.pages_to_cm.round(2) %>cm</dd>
     <dt>Mean pages per record<dt>
     <dd><%= @result.mean_pages %></dd>
     <dt>Median pages per record<dt>
     <dd><%= @result.median_pages %></dd>
     <dt>Mean record width</dt>
-    <dd><%= @result.mean_width %>cm</dd>
+    <dd><%= @result.mean_width.round(2) %>cm</dd>
     <dt>Median record width</dt>
-    <dd><%= @result.median_width %>cm</dd>
-    <dt>Serial width assuming <%= @result.cm_per_serial %>cm per serial</dt>
-    <dd><%= @result.serial_width %>cm</dd>
-    <dt>Multi-volume width assuming <%= @result.cm_per_volume %>cm per volume<dt>
-    <dd><%= @result.multi_constant_width %>cm</dd>
-    <dt>Multi-volume width using mean record width (<%= @result.mean_width %>)<dt>
-    <dd><%= @result.multi_mean_width %>cm</dd>
-    <dt>Multi-volume width using median record width (<%= @result.median_width %>)<dt>
-    <dd><%= @result.multi_median_width %>cm</dd>
+    <dd><%= @result.median_width.round(2) %>cm</dd>
+    <dt>Serial width assuming <%= @result.cm_per_serial.round(2) %>cm per serial</dt>
+    <dd><%= @result.serial_width.round(2) %>cm</dd>
+    <dt>Multi-volume width assuming <%= @result.cm_per_volume.round(2) %>cm per volume<dt>
+    <dd><%= @result.multi_constant_width.round(2) %>cm</dd>
+    <dt>Multi-volume width using mean record width (<%= @result.mean_width.round(2) %>)<dt>
+    <dd><%= @result.multi_mean_width.round(2) %>cm</dd>
+    <dt>Multi-volume width using median record width (<%= @result.median_width.round(2) %>)<dt>
+    <dd><%= @result.multi_median_width.round(2) %>cm</dd>
     <dt>Total Width<dt>
-    <dd><%= @result.total_width %>cm (<%= @result.cm_to_ft(@result.total_width) %>ft)</dt>
-</div>
+    <dd><%= @result.total_width.round(2) %>cm (<%= @result.cm_to_ft(@result.total_width).round(2) %>ft)</dt>
+</dl>
 
 <h2>Charts</h2>
 <%= pie_chart format_breakdown(@result) %>
 <h3>Distribution of pages per record</h3>
-<%= column_chart distribution(@result.pages, (0..500).step(10).to_a) %>
+<%= column_chart distribution(@result.pages, (0..1000).step(30).to_a) %>
 <h3>Distribution of items per serial</h3>
 <%= column_chart distribution(@result.serials, (0..100).step(1).to_a) %>
 <h3>Distribution of volumes per set</h3>

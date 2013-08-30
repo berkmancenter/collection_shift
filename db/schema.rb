@@ -15,11 +15,12 @@ ActiveRecord::Schema.define(:version => 20130521155433) do
 
   create_table "calculations", :force => true do |t|
     t.string   "library_code"
+    t.string   "collection_code"
     t.string   "call_num_start"
     t.string   "call_num_end"
     t.integer  "travel_time"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "results", :force => true do |t|
@@ -34,5 +35,7 @@ ActiveRecord::Schema.define(:version => 20130521155433) do
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
   end
+
+  add_index "results", ["calculation_id"], :name => "index_results_on_calculation_id"
 
 end

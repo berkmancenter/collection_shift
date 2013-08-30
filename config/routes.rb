@@ -3,7 +3,7 @@ CollectionShift::Application.routes.draw do
         resources :results
     end
     
-    root :to => 'calculations#new'
+    root :to => 'calculations#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

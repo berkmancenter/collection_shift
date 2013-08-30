@@ -1,6 +1,7 @@
 class ResultsController < ApplicationController
   def show
-      @result = Calculation.find(params[:calculation_id]).result
+      @calculation = Calculation.find(params[:calculation_id])
+      @result = @calculation.result
   end
 
   def person_hours
