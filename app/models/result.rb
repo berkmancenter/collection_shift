@@ -15,12 +15,19 @@ class Result < ActiveRecord::Base
     end
 
     def pages_to_cm(page_count = nil)
-        page_count ||= total_pages
+        if page_count
         0.00432 * page_count + 0.746
+        else
+            pages.reduce(0){|sum, p| sum + (0.00432 * p + 0.746)}
+        end
     end
 
     def cm_to_ft(cm)
-        cm / 2.54 / 12
+        cm_to_in(cm) / 12
+    end
+
+    def cm_to_in(cm)
+        cm / 2.54
     end
 
     def mean_pages

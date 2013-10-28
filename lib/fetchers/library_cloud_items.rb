@@ -22,4 +22,8 @@ class LibraryCloudItems
         items = items_by_library_code_and_collection_code(library_code, collection_code, hollis_id)
         items ? items.count : nil
     end
+
+    def part_of_library_collection?(item, library_code, collection_code)
+        item['location'] == library_code && item['details'].any?{|d| d['collection'] == collection_code}
+    end
 end

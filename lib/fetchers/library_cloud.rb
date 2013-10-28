@@ -15,48 +15,40 @@ class LibraryCloud
 
     def pages_in_range(library_code, collection_code, start_call_num, end_call_num)
         result = Result.new(:serials => [], :pages => [], :multi_volumes => [])
-        start_index = 0
-        result.total_records = total_records(library_code, start_call_num, end_call_num)
+        results = records_in_range(library_code, start_call_num, end_call_num, nil)
+        results = filter_by_library_collection(start_call_num, end_call_num, results, library_code, collection_code)
+        result.total_records = results['docs'].count
         result.records_without_pages = 0
-        if result.total_records > MAX_RETURNED_RECORDS
-            puts 'Range too large'
-            return
-        end
-        loop do
-            results = records_in_range(library_code, start_call_num, end_call_num, start_index)
-            results['docs'].each do |doc|
-                pages = pages_to_int(doc['pages'])
-                # "Notated Music"
-                if doc['format'] == 'Serial'
-                    count = @item_api.count(library_code, collection_code, doc['id_inst'])
-                    if count
-                        result.serials << count
-                    end
-                elsif doc['format'] == 'Book' && pages.nil?
-                    count = @item_api.count(library_code, collection_code, doc['id_inst'])
-                    if count
-                        result.multi_volumes << count
-                    else
-                        Rails.logger.warn("Fetcher - Book without pages or items: #{doc['id_inst']}")
-                    end
-                elsif pages
-                    result.pages << pages
-                else
-                    Rails.logger.warn("Fetcher - Something else: #{doc['id_inst']}")
-                    result.records_without_pages += 1
+        results['docs'].each do |doc|
+            pages = pages_to_int(doc['pages'])
+            # "Notated Music"
+            if doc['format'] == 'Serial'
+                count = @item_api.count(library_code, collection_code, doc['id_inst'])
+                if count
+                    result.serials << count
                 end
+            elsif doc['format'] == 'Book' && pages.nil?
+                count = @item_api.count(library_code, collection_code, doc['id_inst'])
+                if count
+                    result.multi_volumes << count
+                else
+                    Rails.logger.warn("Fetcher - Book without pages or items: #{doc['id_inst']}")
+                end
+            elsif pages
+                result.pages << pages
+            else
+                Rails.logger.warn("Fetcher - Something else: #{doc['id_inst']}")
+                result.records_without_pages += 1
             end
-            start_index += LIMIT
-            break if start_index > result.total_records
         end
         result
     end
 
     def total_records(library_code, start_call_num, end_call_num)
-        records_in_range(library_code, start_call_num, end_call_num, 0, 1)['num_found']
+        records_by_page(library_code, start_call_num, end_call_num, 0, 1)['num_found']
     end
 
-    def records_in_range(library_code, start_call_num, end_call_num, start_index = 0, limit = LIMIT)
+    def records_by_page(library_code, start_call_num, end_call_num, start_index = 0, limit = LIMIT)
         num_a = call_num_to_sort_num(start_call_num)
         num_b = call_num_to_sort_num(end_call_num)
         start_number, end_number = [num_a, num_b].minmax
@@ -70,8 +62,58 @@ class LibraryCloud
                 :limit => "#{limit}"
             }
         )
-        puts response.request.uri
+        #puts response.request.uri
         response
+    end
+
+    def records_in_range(library_code, start_call_num, end_call_num, limit = LIMIT)
+        start_index = 0
+        total_records = total_records(library_code, start_call_num, end_call_num)
+        output = {}
+        if total_records > MAX_RETURNED_RECORDS && limit == nil
+            puts 'Range too large'
+            return
+        end
+        if limit && limit < LIMIT
+            return records_by_page(library_code, start_call_num, end_call_num, start_index, limit)
+        end
+        loop do
+            if output.empty?
+                output = records_by_page(library_code, start_call_num, end_call_num, start_index)
+            else
+                output['docs'] += records_by_page(library_code, start_call_num, end_call_num, start_index)['docs']
+            end
+            start_index += LIMIT
+            break if start_index > total_records || (limit && output['docs'].count >= limit)
+        end
+        output
+    end
+
+    def add_item_data(records)
+        records['docs'].each do |record|
+            record['items'] = @item_api.everything_for(record['id_inst'])
+        end
+        records
+    end
+
+    def filter_by_library_collection(start_num, end_num, records, library_code, collection_code)
+        unless records['docs'].first['items']
+            records = add_item_data(records)
+        end
+        records['docs'].each do |doc|
+            doc['items'] = doc['items'].select do |i|
+                @item_api.part_of_library_collection?(i, library_code, collection_code)
+            end
+        end
+        records['docs'].delete_if do |doc|
+            doc['items'].empty? || doc_call_numbers(doc).none?{|c| call_number_in_range?(c, start_num, end_num)}
+        end
+        records
+    end
+
+    def call_number_in_range?(call_number, start_num, end_num)
+        normed_range = (normalize_call_num(start_num)..normalize_call_num(end_num))
+        normed_range.cover?(normalize_call_num(call_number))
     end
 
     def pages_to_int(pages)
@@ -86,6 +128,14 @@ class LibraryCloud
         output = segments.first.split('-').last.strip.gsub(/(\[|\])/,'').to_i
         return if output == 0
         output
+    end
+
+    def doc_call_numbers(doc)
+        doc['items'].map{|i| i['details'].map{|d| d['call_number']}}.flatten
+    end
+
+    def normalize_call_num(call_num)
+        `perl #{Rails.root.join('lib', 'lc_norm.pm')} "#{call_num}"`
     end
 
     def call_num_to_sort_num(call_num)

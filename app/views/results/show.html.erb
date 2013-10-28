@@ -40,7 +40,7 @@
     <dt>Multi-volume width using median record width (<%= @result.median_width.round(2) %>)<dt>
     <dd><%= @result.multi_median_width.round(2) %>cm</dd>
     <dt>Total Width<dt>
-    <dd><%= @result.total_width.round(2) %>cm (<%= @result.cm_to_ft(@result.total_width).round(2) %>ft)</dt>
+    <dd><%= @result.total_width.round(2) %>cm (<%= @result.cm_to_ft(@result.total_width).round(2) %>ft) (<%= @result.cm_to_in(@result.total_width).round(2) %>")</dt>
 </dl>
 
 <h2>Charts</h2>
