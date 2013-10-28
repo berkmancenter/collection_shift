@@ -23,6 +23,6 @@ namespace :collshift do
         end_num = args[:end_num] || 'ML410.M595 D57 2013'
         records = l.records_in_range(library_code, start_num, end_num, nil)
         filtered_records = l.filter_by_library_collection(start_num, end_num, records, 'MUS', 'GEN')
-        puts filtered_records['docs'].count
+        pp filtered_records
     end
 end
