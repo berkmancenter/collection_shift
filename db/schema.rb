@@ -18,9 +18,12 @@ ActiveRecord::Schema.define(:version => 20130521155433) do
     t.string   "collection_code"
     t.string   "call_num_start"
     t.string   "call_num_end"
-    t.integer  "travel_time"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.float    "travel_time"
+    t.float    "avg_feet_moved_per_trip"
+    t.float    "load_time"
+    t.float    "unload_time"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
   end
 
   create_table "results", :force => true do |t|

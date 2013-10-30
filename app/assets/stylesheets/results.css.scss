@@ -1,3 +1,25 @@
 // Place all the styles related to the Results controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+#shift-plan {
+
+    height: 40px;
+    width: 100%;
+
+    .shift-action {
+        height: 100%;
+        display: inline-block;
+    }
+    .shift-action-load {
+        background: #1f77b4;
+    }
+    .shift-action-travel {
+        background: #67B469;
+    }
+    .shift-action-unload {
+        background: #58687E;
+    }
+    .shift-action-return {
+        background: #DF7876;
+    }
+}

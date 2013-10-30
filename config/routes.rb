@@ -1,6 +1,10 @@
 CollectionShift::Application.routes.draw do 
     resources :calculations do
-        resources :results
+        resources :results do
+            member do
+                get :recalculate
+            end
+        end
     end
     
     root :to => 'calculations#index'

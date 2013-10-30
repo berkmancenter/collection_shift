@@ -1,12 +1,22 @@
 <h1>Results</h1>
 
+<h2>Shift Plan</h2>
+<div id="shift-plan"></div>
+<h3 id="total-time"></h3>
+<h3 id="total-trips"></h3>
+
+<%= link_to 'Recalculate', recalculate_calculation_result_path(@calculation, @result) %>
+
 <h2>Input</h2>
 <dl class="dl-horizontal">
     <dt>Library code</dt><dd><%= @calculation.library_code %></dd>
     <dt>Collection code</dt><dd><%= @calculation.collection_code %></dd>
     <dt>Call num start</dt><dd><%= @calculation.call_num_start %></dd>
     <dt>Call num end</dt><dd><%= @calculation.call_num_end %></dd>
-    <dt>Travel time</dt><dd><%= @calculation.travel_time %></dd>
+    <dt>Travel time</dt><dd><input type="number" class="real-time" id="travel-time" value="<%= @calculation.travel_time %>" /></dd>
+    <dt>Average feet moved per trip</dt><dd><input type="number" class="real-time" id="cm-per-trip" value="<%= @calculation.avg_feet_moved_per_trip %>" /></dd>
+    <dt>Load time</dt><dd><input type="number" class="real-time" id="load-time" value="<%= @calculation.load_time %>" /></dd>
+    <dt>Unload time</dt><dd><input type="number" class="real-time" id="unload-time" value="<%= @calculation.unload_time %>" /></dd>
 </dl>
 
 <h2>Measurements</h2>
@@ -14,7 +24,7 @@
     <dt>Total Records</dt><dd><%= @result.total_records %></dd>
     <dt>Total Books</dt><dd><%= @result.pages.count %></dd>
     <dt>Total Serials</dt><dd><%= @result.serials.count %></dd>
-    <dt>Total Multi-volume works</dt><dd><%= @result.multi_volumes.count %></dd>
+    <dt>Total Multi-volume works</dt><dd><%= @result.multi_volumes.reduce(:+) %></dd>
     <dt>Total Pages</dt><dd><%= @result.total_pages %></dd>
     <dt>Records without pages</dt><dd><%= @result.records_without_pages %></dd>
 </dl>
@@ -47,9 +57,25 @@
 <%= pie_chart format_breakdown(@result) %>
 <h3>Distribution of pages per record</h3>
 <%= column_chart distribution(@result.pages, (0..1000).step(30).to_a) %>
-<h3>Distribution of items per serial</h3>
-<%= column_chart distribution(@result.serials, (0..100).step(1).to_a) %>
 <h3>Distribution of volumes per set</h3>
 <%= column_chart distribution(@result.multi_volumes, (0..50).step(1).to_a) %>
+<h3>Distribution of items per serial</h3>
+<%= column_chart distribution(@result.serials, (0..100).step(1).to_a) %>
 
-
+<script type="text/javascript">
+    var totalWidth = <%= @result.total_width.round(2) %>, 
+        cmPerTrip = <%= ft_to_cm(@calculation.avg_feet_moved_per_trip) %>,
+        loadTime = <%= @calculation.load_time %>,
+        travelTime = <%= @calculation.travel_time %>,
+        unloadTime = <%= @calculation.unload_time %>,
+        shiftPlan = generateShiftPlan(totalWidth, cmPerTrip, loadTime, travelTime, unloadTime);
+    graphShiftPlan(shiftPlan);
+    $('.real-time').on('change', function() {
+            cmPerTrip = parseFloat($('#cm-per-trip').val()) * 12 * 2.54;
+            loadTime = parseFloat($('#load-time').val());
+            travelTime = parseFloat($('#travel-time').val());
+            unloadTime = parseFloat($('#unload-time').val());
+            var shiftPlan = generateShiftPlan(totalWidth, cmPerTrip, loadTime, travelTime, unloadTime);
+            graphShiftPlan(shiftPlan);
+    });
+</script>

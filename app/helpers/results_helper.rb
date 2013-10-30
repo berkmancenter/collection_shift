@@ -1,4 +1,5 @@
 module ResultsHelper
+    include MathUtils
     def distribution(array, classes)
         output = {}
         classes.each_with_index do |c, i|

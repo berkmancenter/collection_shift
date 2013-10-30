@@ -4,7 +4,8 @@ class Result < ActiveRecord::Base
     serialize :multi_volumes
     serialize :pages
     serialize :serials
-    before_save :setup_defaults
+    before_create :setup_defaults
+    include MathUtils
 
     def total_pages
         pages.reduce(:+)
@@ -16,18 +17,10 @@ class Result < ActiveRecord::Base
 
     def pages_to_cm(page_count = nil)
         if page_count
-        0.00432 * page_count + 0.746
+        0.0052 * page_count + 0.75
         else
-            pages.reduce(0){|sum, p| sum + (0.00432 * p + 0.746)}
+            pages.reduce(0){|sum, p| sum + (0.0052 * p + 0.75)}
         end
-    end
-
-    def cm_to_ft(cm)
-        cm_to_in(cm) / 12
-    end
-
-    def cm_to_in(cm)
-        cm / 2.54
     end
 
     def mean_pages
@@ -62,8 +55,16 @@ class Result < ActiveRecord::Base
         multi_volumes.empty? ? 0.0 : multi_volumes.reduce(:+) * cm_per_volume
     end
 
+    def pageless_mean_width
+        records_without_pages * mean_width
+    end
+
+    def pageless_median_width
+        records_without_pages * median_width
+    end
+
     def total_width 
-        pages_to_cm + serial_width + multi_median_width
+        pages_to_cm + serial_width + multi_constant_width + pageless_median_width
     end
 
     private
@@ -72,13 +73,7 @@ class Result < ActiveRecord::Base
         self.cm_per_volume ||= 3
         self.serials ||= []
         self.pages ||= []
-        self.multi_volumes = []
+        self.multi_volumes ||= []
         self.records_without_pages ||= 0
-    end
-
-    def median(array)
-        sorted = array.sort
-        len = sorted.length
-        (sorted[(len - 1) / 2] + sorted[len / 2]) / 2.0
     end
 end

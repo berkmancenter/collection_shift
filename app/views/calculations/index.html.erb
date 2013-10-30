@@ -10,6 +10,7 @@
     <th>Result</th>
     <th></th>
     <th></th>
+    <th></th>
   </tr>
 
 <% @calculations.each do |calculation| %>
@@ -20,6 +21,7 @@
     <td><%= calculation.call_num_end %></td>
     <td><%= calculation.travel_time %></td>
     <td><%= link_to 'Result', calculation_result_path(calculation, calculation.result) if calculation.result %></td>
+    <td><%= link_to 'Recalculate', recalculate_calculation_result_path(calculation, calculation.result) %></td>
     <td><%= link_to 'Edit', edit_calculation_path(calculation) %></td>
     <td><%= link_to 'Destroy', calculation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>

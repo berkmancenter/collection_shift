@@ -5,7 +5,11 @@ class CreateCalculations < ActiveRecord::Migration
       t.string :collection_code
       t.string :call_num_start
       t.string :call_num_end
-      t.integer :travel_time
+      t.float :travel_time
+      t.float :avg_feet_moved_per_trip
+      t.float :load_time
+      t.float :unload_time
+
 
       t.timestamps
     end
