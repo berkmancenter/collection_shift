@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20130521155433) do
     t.string   "collection_code"
     t.string   "call_num_start"
     t.string   "call_num_end"
+    t.string   "email_to_notify"
     t.float    "travel_time"
     t.float    "avg_feet_moved_per_trip"
     t.float    "load_time"

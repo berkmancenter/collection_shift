@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require twitter/bootstrap/tooltip
 //= require twitter/bootstrap/popover
+//= require twitter/bootstrap/alert
 //= require_tree .

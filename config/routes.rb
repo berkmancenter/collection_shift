@@ -1,3 +1,4 @@
+require 'sidekiq/web'
 CollectionShift::Application.routes.draw do 
     resources :calculations do
         resources :results do
@@ -8,6 +9,7 @@ CollectionShift::Application.routes.draw do
     end
     
     root :to => 'calculations#index'
+    mount Sidekiq::Web => '/sidekiq'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

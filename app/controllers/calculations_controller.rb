@@ -41,11 +41,19 @@ class CalculationsController < ApplicationController
   # POST /calculations.json
   def create
     @calculation = Calculation.new(params[:calculation])
-    @calculation.calculate
 
     respond_to do |format|
       if @calculation.save
-        format.html { redirect_to calculation_result_path(@calculation.id, @calculation.result.id) }
+        Calculator.perform_async(@calculation.id)
+        format.html do
+            flash[:notice] = "Depending on the size of the call number range, this may take a while."
+            if @calculation.email_to_notify.present?
+                 flash[:notice] += " We'll let you know when it's finished."
+            else
+                flash[:notice] += " Refresh this page to check for completion."
+            end
+            redirect_to root_path
+        end
         format.json { render json: @calculation.result, status: :created, location: @calculation.result }
       else
         format.html { render action: "new" }
@@ -77,7 +85,9 @@ class CalculationsController < ApplicationController
     @calculation.destroy
 
     respond_to do |format|
-      format.html { redirect_to calculations_url }
+      format.html do
+          redirect_to calculations_url 
+      end
       format.json { head :no_content }
     end
   end

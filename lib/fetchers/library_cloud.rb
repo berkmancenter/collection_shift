@@ -138,6 +138,10 @@ class LibraryCloud
         `perl #{Rails.root.join('lib', 'lc_norm.pm')} "#{call_num}"`
     end
 
+    def has_call_number?(call_num)
+        !self.class.get('/item', { :query => { :filter => "call_num:#{call_num}" }})['docs'].empty?
+    end
+
     def call_num_to_sort_num(call_num)
         self.class.get('/item', { :query => { :filter => "call_num:#{call_num}" }})['docs'].first['loc_call_num_sort_order'].first
     end
