@@ -5,7 +5,6 @@
 <h3 id="total-time"></h3>
 <h3 id="total-trips"></h3>
 
-<%= link_to 'Recalculate', recalculate_calculation_result_path(@calculation, @result) %>
 
 <h2>Input</h2>
 <dl class="dl-horizontal">
@@ -19,18 +18,19 @@
     <dt>Unload time</dt><dd><input type="number" class="real-time" id="unload-time" value="<%= @calculation.unload_time %>" /></dd>
 </dl>
 
-<h2>Measurements</h2>
-<dl class="dl-horizontal">
+<h2 data-toggle="collapse" data-target="#lib-cloud-data">Library Cloud Data</h2>
+<dl id="lib-cloud-data" class="dl-horizontal collapse">
     <dt>Total Records</dt><dd><%= @result.total_records %></dd>
     <dt>Total Books</dt><dd><%= @result.pages.count %></dd>
     <dt>Total Serials</dt><dd><%= @result.serials.count %></dd>
     <dt>Total Multi-volume works</dt><dd><%= @result.multi_volumes.reduce(:+) %></dd>
     <dt>Total Pages</dt><dd><%= @result.total_pages %></dd>
     <dt>Records without pages</dt><dd><%= @result.records_without_pages %></dd>
+    <%= link_to 'Recalculate', recalculate_calculation_result_path(@calculation, @result) %>
 </dl>
 
-<h2>Derived Stats</h2>
-<dl class="dl-horizontal">
+<h2 data-toggle="collapse" data-target="#derived">Derived Stats</h2>
+<dl id="derived" class="dl-horizontal collapse">
     <dt>Total page width</dt>
     <dd><%= @result.pages_to_cm.round(2) %>cm</dd>
     <dt>Mean pages per record<dt>
@@ -53,14 +53,17 @@
     <dd><%= @result.total_width.round(2) %>cm (<%= @result.cm_to_ft(@result.total_width).round(2) %>ft) (<%= @result.cm_to_in(@result.total_width).round(2) %>")</dt>
 </dl>
 
-<h2>Charts</h2>
-<%= pie_chart format_breakdown(@result) %>
-<h3>Distribution of pages per record</h3>
-<%= column_chart distribution(@result.pages, (0..1000).step(30).to_a) %>
-<h3>Distribution of volumes per set</h3>
-<%= column_chart distribution(@result.multi_volumes, (0..50).step(1).to_a) %>
-<h3>Distribution of items per serial</h3>
-<%= column_chart distribution(@result.serials, (0..100).step(1).to_a) %>
+<h2 data-toggle="collapse" data-target="#charts">Charts</h2>
+<div id="charts" class="collapse">
+    <%= pie_chart format_breakdown(@result) %>
+    <h3>Distribution of pages per record</h3>
+    <%= column_chart distribution(@result.pages, (0..1000).step(30).to_a) %>
+    <h3>Distribution of volumes per set</h3>
+    <%= column_chart distribution(@result.multi_volumes, (0..50).step(1).to_a) %>
+    <h3>Distribution of items per serial</h3>
+    <%= column_chart distribution(@result.serials, (0..100).step(1).to_a) %>
+</div>
+
 
 <script type="text/javascript">
     var totalWidth = <%= @result.total_width.round(2) %>, 
