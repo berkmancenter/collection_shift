@@ -47,6 +47,20 @@ class LibraryCloud
         records_by_page(library_code, start_call_num, end_call_num, 0, 1)['num_found']
     end
 
+    def has_library_records?(library_code)
+        response = self.class.get('/item',
+            :query => {
+                :filter => [
+                    "holding_libs:#{library_code}"
+                ],
+                :start => "0",
+                :limit => "1"
+            }
+        )
+        #puts response.request.uri
+        !response['docs'].empty?
+    end
+
     def records_by_page(library_code, start_call_num, end_call_num, start_index = 0, limit = LIMIT)
         num_a = call_num_to_sort_num(start_call_num)
         num_b = call_num_to_sort_num(end_call_num)

@@ -15,57 +15,69 @@
         <%= f.label :library_code, class: 'col-md-2 control-label' %>
         <div class="col-md-10">
             <%= f.text_field :library_code, class: 'form-control' %>
+            <p class="help-block">Case-sensitive, so be careful.</p>
         </div>
     </div>
     <div class="form-group">
         <%= f.label :collection_code, class: 'col-md-2 control-label' %>
         <div class="col-md-10">
             <%= f.text_field :collection_code, class: 'form-control' %>
+            <p class="help-block">Also case-sensitive, so continue to be careful.</p>
         </div>
     </div>
     <div class="form-group">
-        <%= f.label :call_num_start, class: 'col-md-2 control-label' %>
+        <%= f.label :call_num_start, 'First call number', class: 'col-md-2 control-label' %>
         <div class="col-md-10">
             <%= f.text_field :call_num_start, class: 'form-control' %>
+            <p class="help-block">We currently only support the Library of Congress numbering scheme. Case, punctuation, and spacing are all important.</p>
         </div>
     </div>
     <div class="form-group">
-        <%= f.label :call_num_end, class: 'col-md-2 control-label' %>
+        <%= f.label :call_num_end, 'Last call number', class: 'col-md-2 control-label' %>
         <div class="col-md-10">
             <%= f.text_field :call_num_end, class: 'form-control' %>
+            <p class="help-block">LC call numbers, case, punctuation, and spacing all continue to be important.</p>
         </div>
     </div>
-    <div class="form-group">
-        <%= f.label :travel_time, class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.number_field :travel_time, class: 'form-control' %>
+    <div class="well">
+    <p style="text-align:center; margin-bottom:1.5em;"><strong>Don&apos;t worry about getting this section exactly right - you can tweak these later.</strong></p>
+        <div class="form-group">
+            <%= f.label :travel_time, class: 'col-md-2 control-label' %>
+            <div class="col-md-10">
+                <%= f.number_field :travel_time, class: 'form-control' %>
+                <p class="help-block">How long does it take (in minutes) to get from the current location to the destination?</p>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <%= f.label :avg_feet_moved_per_trip, class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.number_field :avg_feet_moved_per_trip, class: 'form-control' %>
+        <div class="form-group">
+            <%= f.label :avg_feet_moved_per_trip, 'Feet moved per trip', class: 'col-md-2 control-label' %>
+            <div class="col-md-10">
+                <%= f.number_field :avg_feet_moved_per_trip, class: 'form-control' %>
+                <p class="help-block">This is the average number of linear feet of shelf space moved per trip. For example, a single dolly could move ~4 linear feet of books, while a book cart could move significantly more.</p>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <%= f.label :load_time, class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.number_field :load_time, class: 'form-control' %>
+        <div class="form-group">
+            <%= f.label :load_time, class: 'col-md-2 control-label' %>
+            <div class="col-md-10">
+                <%= f.number_field :load_time, class: 'form-control' %>
+                <p class="help-block">How long does it take (in minutes) to load one trip&apos;s-worth of items onto your selected mode of transportation?</p>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <%= f.label :unload_time, class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.number_field :unload_time, class: 'form-control' %>
+        <div class="form-group">
+            <%= f.label :unload_time, class: 'col-md-2 control-label' %>
+            <div class="col-md-10">
+                <%= f.number_field :unload_time, class: 'form-control' %>
+                <p class="help-block">How long does it take (in minutes) to unload one trip&apos;s-worth of items when at your destination?</p>
+            </div>
         </div>
     </div>
     <div class="form-group">
         <%= f.label :email_to_notify, class: 'col-md-2 control-label' %>
         <div class="col-md-10">
             <%= f.text_field :email_to_notify, class: 'form-control' %>
+            <p class="help-block">This might take a little while. Where should we contact you to let you know your calcuation is complete?</p>
         </div>
     </div>
-    <div class="actions">
+    <div class="actions" style="text-align: center">
         <%= f.submit 'Calculate', class: 'btn btn-primary' %>
     </div>
 <% end %>

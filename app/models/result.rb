@@ -8,10 +8,11 @@ class Result < ActiveRecord::Base
     include MathUtils
 
     def total_pages
-        pages.reduce(:+)
+        pages.empty? ? 0 : pages.reduce(:+)
     end
 
     def avg_pages_per_record
+        return 0 if pages.empty?
         total_pages / pages.length
     end
 
@@ -24,6 +25,7 @@ class Result < ActiveRecord::Base
     end
 
     def mean_pages
+        return 0 if pages.empty?
         total_pages / pages.count
     end
 
