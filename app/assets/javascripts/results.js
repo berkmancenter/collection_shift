@@ -42,7 +42,7 @@ function graphShiftPlan(shiftPlan) {
         $graph = $('#shift-plan');
     if ($graph.children().length > 0) $graph.empty();
     shiftPlan.forEach(function(action) {
-        $graph.append('<div class="shift-action shift-action-' + action['name'].toLowerCase() +
+        $graph.append('<div title="' + action['name'] + '" class="shift-action shift-action-' + action['name'].toLowerCase() +
             '" style="width: ' + (action['time'] / totalTime * 100) + '%;" >&nbsp;</div>');
     });
     $('#total-time').text(minutesToString(totalTime));

@@ -15,8 +15,7 @@ class LibraryCloud
 
     def pages_in_range(library_code, collection_code, start_call_num, end_call_num)
         result = Result.new(:serials => [], :pages => [], :multi_volumes => [])
-        results = records_in_range(library_code, start_call_num, end_call_num, nil)
-        results = filter_by_library_collection(start_call_num, end_call_num, results, library_code, collection_code)
+        results = records_in_range(library_code, collection_code, start_call_num, end_call_num, nil)
         result.total_records = results['docs'].count
         result.records_without_pages = 0
         results['docs'].each do |doc|
@@ -66,7 +65,7 @@ class LibraryCloud
         response
     end
 
-    def records_in_range(library_code, start_call_num, end_call_num, limit = LIMIT)
+    def records_in_range(library_code, collection_code, start_call_num, end_call_num, limit = LIMIT)
         start_index = 0
         total_records = total_records(library_code, start_call_num, end_call_num)
         output = {}
@@ -75,13 +74,16 @@ class LibraryCloud
             return
         end
         if limit && limit < LIMIT
-            return records_by_page(library_code, start_call_num, end_call_num, start_index, limit)
+            output = records_by_page(library_code, start_call_num, end_call_num, start_index, limit)
+            return filter_by_library_collection(start_call_num, end_call_num, output, library_code, collection_code)
         end
         loop do
             if output.empty?
                 output = records_by_page(library_code, start_call_num, end_call_num, start_index)
+                output = filter_by_library_collection(start_call_num, end_call_num, output, library_code, collection_code)
             else
-                output['docs'] += records_by_page(library_code, start_call_num, end_call_num, start_index)['docs']
+                temp = records_by_page(library_code, start_call_num, end_call_num, start_index)
+                output['docs'] += filter_by_library_collection(start_call_num, end_call_num, temp, library_code, collection_code)['docs']
             end
             start_index += LIMIT
             break if start_index > total_records || (limit && output['docs'].count >= limit)
@@ -101,8 +103,12 @@ class LibraryCloud
             records = add_item_data(records)
         end
         records['docs'].each do |doc|
-            doc['items'] = doc['items'].select do |i|
-                @item_api.part_of_library_collection?(i, library_code, collection_code)
+            if doc['items']
+                doc['items'] = doc['items'].select do |i|
+                    @item_api.part_of_library_collection?(i, library_code, collection_code)
+                end
+            else
+                doc['items'] = []
             end
         end
         records['docs'].delete_if do |doc|
