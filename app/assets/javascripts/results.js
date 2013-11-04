@@ -32,8 +32,11 @@ function minutesToString(minutes) {
         hours = Math.floor(minutes / 60),
         minutes = Math.round(minutes - hours * 60);
 
-    if (hours > 0) output += hours + ' hours ';
-    if (minutes > 0) output += minutes + ' minutes';
+    if (hours > 0) output += hours + ' hour';
+    if (hours > 1) output += 's';
+    output += ' ';
+    if (minutes > 0) output += minutes + ' minute';
+    if (minutes > 1) output += 's';
     return output;
 }
 
@@ -46,5 +49,5 @@ function graphShiftPlan(shiftPlan) {
             '" style="width: ' + (action['time'] / totalTime * 100) + '%;" >&nbsp;</div>');
     });
     $('#total-time').text(minutesToString(totalTime));
-    $('#total-trips').text((shiftPlan.length / 4) + ' round trips');
+    $('#total-trips').text((shiftPlan.length / 4) > 1 ? (shiftPlan.length / 4) + ' round trips' : (shiftPlan.length / 4) + ' round trip');
 }
