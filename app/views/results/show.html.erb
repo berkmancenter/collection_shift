@@ -1,25 +1,32 @@
-<h1>Results</h1>
-
 <h2>Shift Plan</h2>
-<div id="shift-plan"></div>
-<h3 id="total-time"></h3>
-<h3 id="total-trips"></h3>
+<div class="well well-lg">
+    <h2 data-toggle="collapse" data-target="#input-data">Input</h2>
+    <dl id="input-data" class="dl-horizontal collapse in">
+        <dt>Library code</dt><dd><%= @calculation.library_code %></dd>
+        <dt>Collection code</dt><dd><%= @calculation.collection_code %></dd>
+        <dt>Call num start</dt><dd><%= @calculation.call_num_start %></dd>
+        <dt>Call num end</dt><dd><%= @calculation.call_num_end %></dd>
+        <dt>Travel time</dt><dd><input type="number" class="real-time" id="travel-time" value="<%= @calculation.travel_time %>" /></dd>
+        <dt>Feet moved per trip</dt><dd><input type="number" class="real-time" id="cm-per-trip" value="<%= @calculation.avg_feet_moved_per_trip %>" /></dd>
+        <dt>Load time</dt><dd><input type="number" class="real-time" id="load-time" value="<%= @calculation.load_time %>" /></dd>
+        <dt>Unload time</dt><dd><input type="number" class="real-time" id="unload-time" value="<%= @calculation.unload_time %>" /></dd>
+    </dl>
+    <h2>Results</h2>
+    <h3 class="overview" id="total-items">~<%= @result.total_records %> items</h3>
+    <h3 class="overview" id="total-feet">~<%= @result.cm_to_ft(@result.total_width).round(1) %> linear feet</h3>
+    <h3 class="overview" id="total-time"></h3>
+    <h3 class="overview" id="total-trips"></h3>
+    <h4>Visualized</h4>
+    <div id="shift-plan">
+        <div class="actions"></div>
+        <div class="trips"></div>
+        <div class="total-trip">&nbsp;</div>
+    </div>
+</div>
 
-
-<h2 data-toggle="collapse" data-target="#input-data">Input</h2>
-<dl id="input-data" class="dl-horizontal collapse in">
-    <dt>Library code</dt><dd><%= @calculation.library_code %></dd>
-    <dt>Collection code</dt><dd><%= @calculation.collection_code %></dd>
-    <dt>Call num start</dt><dd><%= @calculation.call_num_start %></dd>
-    <dt>Call num end</dt><dd><%= @calculation.call_num_end %></dd>
-    <dt>Travel time</dt><dd><input type="number" class="real-time" id="travel-time" value="<%= @calculation.travel_time %>" /></dd>
-    <dt>Average feet moved per trip</dt><dd><input type="number" class="real-time" id="cm-per-trip" value="<%= @calculation.avg_feet_moved_per_trip %>" /></dd>
-    <dt>Load time</dt><dd><input type="number" class="real-time" id="load-time" value="<%= @calculation.load_time %>" /></dd>
-    <dt>Unload time</dt><dd><input type="number" class="real-time" id="unload-time" value="<%= @calculation.unload_time %>" /></dd>
-</dl>
 
 <h2 data-toggle="collapse" data-target="#lib-cloud-data">Library Cloud Data</h2>
-<dl id="lib-cloud-data" class="dl-horizontal collapse">
+<dl id="lib-cloud-data" class="well well-lg dl-horizontal collapse">
     <dt>Total Records</dt><dd><%= @result.total_records %></dd>
     <dt>Total Books</dt><dd><%= @result.pages.count %></dd>
     <dt>Total Serials</dt><dd><%= @result.serials.count %></dd>
@@ -30,7 +37,7 @@
 </dl>
 
 <h2 data-toggle="collapse" data-target="#derived">Derived Stats</h2>
-<dl id="derived" class="dl-horizontal collapse">
+<dl id="derived" class="well well-lg dl-horizontal collapse">
     <dt>Total page width</dt>
     <dd><%= @result.pages_to_cm.round(2) %>cm</dd>
     <dt>Mean pages per record<dt>
@@ -54,7 +61,8 @@
 </dl>
 
 <h2 data-toggle="collapse" data-target="#charts">Charts</h2>
-<div id="charts" class="collapse">
+<div id="charts" class="well well-lg collapse in">
+    <h3>Record types</h3>
     <%= pie_chart format_breakdown(@result) %>
     <h3>Distribution of pages per record</h3>
     <%= column_chart distribution(@result.pages, (0..1000).step(30).to_a) %>

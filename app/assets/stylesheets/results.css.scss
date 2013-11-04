@@ -1,11 +1,42 @@
 // Place all the styles related to the Results controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+h2[data-toggle="collapse"] {
+    cursor: pointer;
+}
+
+h3.overview {
+    text-align: center;
+    margin: 0.5em;
+}
+
 #shift-plan {
 
-    height: 40px;
+    height: 50px;
     width: 100%;
+    cursor: default;
 
+    .total-trip {
+        height: 10px;
+        background: #F7E66D;
+    }
+    .trips {
+        height: 15px;
+        .shift-trip {
+            display: inline-block;
+            background: #EC918A;
+            height: 100%;
+        }
+        .shift-trip.even {
+            background: #C2564D;
+        }
+    }
+
+    .actions {
+        height: 25px;
+        line-height: 1em;
+    }
     .shift-action {
         height: 100%;
         display: inline-block;
@@ -22,7 +53,6 @@
     .shift-action-return {
         background: #6B8F6B;
     }
+
 }
-h2[data-toggle="collapse"] {
-    cursor: pointer;
-}
+
