@@ -31,7 +31,9 @@ namespace :collshift do
         library_code = args[:library_code] || 'MUS'
         collection_code = args[:library_code] || 'GEN'
         start_num = args[:start_num] || 'ML410.M377 A88 2002'
+        start_num = args[:start_num] || 'ML410.B244 A5 2009'
         end_num = args[:end_num] || 'ML410.M595 D57 2013'
+        end_num = args[:end_num] || 'ML410.B4968 A4 2002'
         result = l.pages_in_range(library_code, collection_code, start_num, end_num)
         pp result
     end

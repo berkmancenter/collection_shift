@@ -12,6 +12,8 @@ gem 'therubyracer'
 gem 'less-rails-bootstrap'
 gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'ruby-prof'
+gem 'test-unit'
 
 # Gems used only for assets and not required
 # in production environments by default.
