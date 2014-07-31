@@ -18,10 +18,12 @@ class Result < ActiveRecord::Base
 
     def pages_to_cm(page_count = nil)
         if page_count
-        0.0052 * page_count + 0.75
+            cm = 0.0047149 * page_count + 0.691
         else
-            pages.reduce(0){|sum, p| sum + (0.0052 * p + 0.75)}
+            cm = pages.reduce(0){|sum, p| sum + (0.0047149 * p + 0.691)}
         end
+        cm_with_expansion = cm * 1.1 - 5
+        return cm_with_expansion
     end
 
     def mean_pages
