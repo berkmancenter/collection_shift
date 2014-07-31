@@ -78,7 +78,6 @@ class LibraryCloud
     def add_item_data!(records)
         hollis_ids = records.map{|d| d['id_inst']}
         items = @item_api.everything_for(hollis_ids)
-        puts "Item count: #{items.count}"
         item_hash = {}
         items.each do |i|
             if item_hash[i['bib_doc_id']]
