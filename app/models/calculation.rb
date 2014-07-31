@@ -8,7 +8,7 @@ class Calculation < ActiveRecord::Base
     include MathUtils
 
     def calculate
-        self.result = LibraryCloud.new.pages_in_range(library_code, collection_code, call_num_start, call_num_end)
+        self.result = LibraryCloud.new.build_result(library_code, collection_code, call_num_start, call_num_end)
     end
 
     private

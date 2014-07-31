@@ -1,3 +1,6 @@
+# Pass in call numbers separated by commas, it returns call numbers separated
+# by commas
 use Library::CallNumber::LC;
-my $a = Library::CallNumber::LC->new($ARGV[0]);
-print $a->normalize;
+@call_nums = split(',',<STDIN>);
+@normed = map { Library::CallNumber::LC->normalize($_) } @call_nums;
+print(join(',',@normed));
