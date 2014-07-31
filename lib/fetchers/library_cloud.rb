@@ -67,14 +67,10 @@ class LibraryCloud
 
         filter = library_and_range_filter(library_code, start_call_num, end_call_num)
         records = all_records(filter)
-        puts "Record count: #{records.count}"
 
         add_item_data!(records)
-        puts 'got item data'
         filter_records_by_collection!(records, library_code, collection_code)
-        puts 'filtered by collection'
         filter_records_by_range!(records, start_call_num, end_call_num)
-        puts 'filtered by range'
 
         records
     end
