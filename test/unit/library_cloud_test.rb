@@ -77,4 +77,17 @@ class LibraryCloudTest < ActiveSupport::TestCase
     ]
     assert output_call_nums.sort == expected_output.sort
   end
+
+  test "wildcardize" do
+    call_nums = [
+      'ML410.T173 A3 2013',
+      'ML410 .T173 A3 2013',
+      'ML410.T173 A3 2013',
+      'ML410 . T173 A3 2013'
+    ]
+    call_nums.each do |call_num|
+      wildcarded = @api.wildcardize(call_num)
+      assert wildcarded == 'ML410*.*T173*A3*2013'
+    end
+  end
 end

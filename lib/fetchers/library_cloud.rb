@@ -186,7 +186,7 @@ class LibraryCloud
     end
 
     def has_call_number?(call_num)
-        !self.class.get('/', { :query => { :filter => "call_num:#{call_num}" }})['docs'].empty?
+        !self.class.get('/', { :query => { :filter => "call_num:#{wildcardize(call_num)}" }})['docs'].empty?
     end
 
     def call_num_to_sort_num(call_num)
@@ -198,7 +198,7 @@ class LibraryCloud
     end
 
     def call_num_filter(call_num)
-        "call_num:#{call_num}"
+        "call_num:#{wildcardize(call_num)}"
     end
 
     def library_filter(library_code)
@@ -214,6 +214,10 @@ class LibraryCloud
 
     def library_and_range_filter(library_code, start_num, end_num)
         [library_filter(library_code), range_filter(start_num, end_num)]
+    end
+
+    def wildcardize(call_num)
+        call_num.gsub(/(\W)/, ' \1 ').gsub(/\s+/, '*')
     end
 
     alias_method :all_records, :all_docs
