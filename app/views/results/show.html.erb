@@ -17,7 +17,7 @@
     </dl>
     <h2>Results</h2>
     <% unless @result.estimated_feet %><h3 class="overview" id="total-items">~<%= @result.total_records %> items</h3><% end %>
-    <h3 class="overview" id="total-feet">~<span id="feet"><%= @result.cm_to_ft(@result.total_width).round(1) %></span> linear feet</h3>
+    <h3 class="overview" id="total-feet">~<span id="feet"><%= @result.total_width_in_ft.round(1) %></span> linear feet</h3>
     <h3 class="overview" id="total-time"></h3>
     <h3 class="overview" id="total-trips"></h3>
     <h4>Visualized</h4>
@@ -61,7 +61,7 @@
     <dt>Multi-volume width using median record width (<%= @result.median_width.round(2) %>)<dt>
     <dd><%= @result.multi_median_width.round(2) %>cm</dd>
     <dt>Total Width<dt>
-    <dd><%= @result.total_width.round(2) %>cm (<%= @result.cm_to_ft(@result.total_width).round(2) %>ft) (<%= @result.cm_to_in(@result.total_width).round(2) %>")</dt>
+    <dd><%= @result.total_width.round(2) %>cm (<%= @result.total_width_in_ft.round(2) %>ft) (<%= @result.total_width_in_inches.round(2) %>")</dt>
 </dl>
 
 <h2 data-toggle="collapse" data-target="#charts">Charts</h2>

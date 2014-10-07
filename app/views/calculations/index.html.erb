@@ -13,6 +13,7 @@
     <th>Collection code</th>
     <th>Call num start</th>
     <th>Call num end</th>
+    <th>Estimated Feet</th>
     <th>Result</th>
     <!-- <th></th> -->
     <!-- <th></th> -->
@@ -24,7 +25,16 @@
     <td><%= calculation.collection_code %></td>
     <td><%= calculation.call_num_start %></td>
     <td><%= calculation.call_num_end %></td>
-    <td><% if calculation.result %><%= link_to 'Result', calculation_result_path(calculation, calculation.result) if calculation.result %><% end %></td>
+    <td>
+    <% if calculation.result %>
+        <%= calculation.result.estimated_feet ? calculation.result.estimated_feet : calculation.result.total_width_in_ft.round(1) %>
+    <% end %>
+    </td>
+    <td>
+      <% if calculation.result %>
+        <%= link_to 'Result', calculation_result_path(calculation, calculation.result) %>
+      <% end %>
+    </td>
     <!-- <td><%= link_to 'Edit', edit_calculation_path(calculation) %></td> -->
     <!-- <td><%= link_to 'Destroy', calculation, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
   </tr>

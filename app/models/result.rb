@@ -72,6 +72,14 @@ class Result < ActiveRecord::Base
         pages_to_cm + serial_width + multi_constant_width + pageless_median_width
     end
 
+    def total_width_in_ft
+        cm_to_ft(total_width)
+    end
+
+    def total_width_in_inches
+        cm_to_in(total_width)
+    end
+
     private
     def setup_defaults
         self.cm_per_serial ||= 0.2
