@@ -25,6 +25,7 @@ class CalculationsController < ApplicationController
   # GET /calculations/new.json
   def new
     @calculation = Calculation.new
+    @calculation.result = @calculation.build_result
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,15 +45,19 @@ class CalculationsController < ApplicationController
 
     respond_to do |format|
       if @calculation.save
-        Calculator.perform_async(@calculation.id)
+        Calculator.perform_async(@calculation.id) unless @calculation.result.estimated_feet
         format.html do
-            flash[:notice] = "Depending on the size of the call number range, this may take a while."
-            if @calculation.email_to_notify.present?
-                 flash[:notice] += " We'll let you know when it's finished."
+            if @calculation.result.estimated_feet
+                redirect_to calculation_result_path(@calculation, @calculation.result)
             else
-                flash[:notice] += " Refresh this page to check for completion."
+                flash[:notice] = "Depending on the size of the call number range, this may take a while."
+                if @calculation.email_to_notify.present?
+                    flash[:notice] += " We'll let you know when it's finished."
+                else
+                    flash[:notice] += " Refresh this page to check for completion."
+                end
+                redirect_to root_path
             end
-            redirect_to root_path
         end
         format.json { render json: @calculation.result, status: :created, location: @calculation.result }
       else

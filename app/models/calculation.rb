@@ -1,10 +1,13 @@
 class Calculation < ActiveRecord::Base
     has_one :result
-    attr_accessible :call_num_end, :call_num_start, :collection_code, :library_code, :travel_time, :avg_feet_moved_per_trip, :load_time, :unload_time, :email_to_notify
+    attr_accessible :call_num_end, :call_num_start, :collection_code, :library_code, :travel_time, :avg_feet_moved_per_trip, :load_time, :unload_time, :email_to_notify, :result_attributes
     after_initialize :setup_defaults
-    validates :call_num_start, :call_num_end, :library_code, :collection_code, :travel_time, :avg_feet_moved_per_trip, :load_time, :unload_time, :presence => true
+    validates :call_num_start, :call_num_end, :library_code, :collection_code,
+      :travel_time, :avg_feet_moved_per_trip, :load_time, :unload_time,
+      :presence => true, unless: Proc.new { |c| c.result.estimated_feet }
     validate :call_numbers_in_library_cloud
     validate :library_records_in_library_cloud
+    accepts_nested_attributes_for :result
     include MathUtils
 
     def calculate

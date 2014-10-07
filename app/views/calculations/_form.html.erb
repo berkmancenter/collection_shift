@@ -11,34 +11,55 @@
         </div>
     <% end %>
 
-    <div class="form-group">
-        <%= f.label :library_code, class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.text_field :library_code, class: 'form-control' %>
-            <p class="help-block">Case-sensitive, so be careful.</p>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#basic" role="tab" data-toggle="tab">I know how many feet I have</a></li>
+        <li><a href="#advanced" role="tab" data-toggle="tab">I only know the call number range</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="basic">
+            <%= f.fields_for :result do |result_form| %>
+                <div class="form-group">
+                    <%= result_form.label :estimated_feet, class: 'col-md-2 control-label' %>
+                    <div class="col-md-10">
+                        <%= result_form.number_field :estimated_feet, in: (0..1000), step: 0.1, class: 'form-control' %>
+                        <p class="help-block">How many linear feet are you looking to move?</p>
+                    </div>
+                </div>
+            <% end %>
+        </div>
+
+        <div class="tab-pane" id="advanced">
+            <div class="form-group">
+                <%= f.label :library_code, class: 'col-md-2 control-label' %>
+                <div class="col-md-10">
+                    <%= f.text_field :library_code, class: 'form-control' %>
+                    <p class="help-block">Case-sensitive, so be careful.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <%= f.label :collection_code, class: 'col-md-2 control-label' %>
+                <div class="col-md-10">
+                    <%= f.text_field :collection_code, class: 'form-control' %>
+                    <p class="help-block">Also case-sensitive, so continue to be careful.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <%= f.label :call_num_start, 'First call number', class: 'col-md-2 control-label' %>
+                <div class="col-md-10">
+                    <%= f.text_field :call_num_start, class: 'form-control' %>
+                    <p class="help-block">We currently only support the Library of Congress numbering scheme. Case, punctuation, and spacing are all important.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <%= f.label :call_num_end, 'Last call number', class: 'col-md-2 control-label' %>
+                <div class="col-md-10">
+                    <%= f.text_field :call_num_end, class: 'form-control' %>
+                    <p class="help-block">LC call numbers, case, punctuation, and spacing all continue to be important.</p>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="form-group">
-        <%= f.label :collection_code, class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.text_field :collection_code, class: 'form-control' %>
-            <p class="help-block">Also case-sensitive, so continue to be careful.</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <%= f.label :call_num_start, 'First call number', class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.text_field :call_num_start, class: 'form-control' %>
-            <p class="help-block">We currently only support the Library of Congress numbering scheme. Case, punctuation, and spacing are all important.</p>
-        </div>
-    </div>
-    <div class="form-group">
-        <%= f.label :call_num_end, 'Last call number', class: 'col-md-2 control-label' %>
-        <div class="col-md-10">
-            <%= f.text_field :call_num_end, class: 'form-control' %>
-            <p class="help-block">LC call numbers, case, punctuation, and spacing all continue to be important.</p>
-        </div>
-    </div>
+    <hr />
     <div class="well">
     <p style="text-align:center; margin-bottom:1.5em;"><strong>Don&apos;t worry about getting this section exactly right - you can tweak these later.</strong></p>
         <div class="form-group">
@@ -70,13 +91,13 @@
             </div>
         </div>
     </div>
-    <div class="form-group">
+    <!--<div class="form-group">
         <%= f.label :email_to_notify, class: 'col-md-2 control-label' %>
         <div class="col-md-10">
             <%= f.text_field :email_to_notify, class: 'form-control' %>
             <p class="help-block">This might take a little while. Where should we contact you to let you know your calcuation is complete?</p>
         </div>
-    </div>
+    </div>-->
     <div class="actions" style="text-align: center">
         <%= f.submit 'Calculate', class: 'btn btn-primary' %>
     </div>

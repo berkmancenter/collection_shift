@@ -1,5 +1,5 @@
 class Result < ActiveRecord::Base
-    attr_accessible :cm_per_serial, :cm_per_volume, :multi_volumes, :pages, :records_without_pages, :serials, :total_records
+    attr_accessible :cm_per_serial, :cm_per_volume, :multi_volumes, :pages, :records_without_pages, :serials, :total_records, :estimated_feet
     belongs_to :calculation
     serialize :multi_volumes
     serialize :pages
@@ -68,6 +68,7 @@ class Result < ActiveRecord::Base
     end
 
     def total_width 
+        return ft_to_cm(estimated_feet) if estimated_feet
         pages_to_cm + serial_width + multi_constant_width + pageless_median_width
     end
 

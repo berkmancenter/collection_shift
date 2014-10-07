@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130521155433) do
+ActiveRecord::Schema.define(:version => 20141007192513) do
 
   create_table "calculations", :force => true do |t|
     t.string   "library_code"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20130521155433) do
     t.integer  "calculation_id"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+    t.float    "estimated_feet"
   end
 
   add_index "results", ["calculation_id"], :name => "index_results_on_calculation_id"

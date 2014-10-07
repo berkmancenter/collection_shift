@@ -18,4 +18,5 @@
 //= require twitter/bootstrap/popover
 //= require twitter/bootstrap/alert
 //= require twitter/bootstrap/tooltip
+//= require twitter/bootstrap/tab
 //= require_tree .
