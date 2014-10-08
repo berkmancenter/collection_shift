@@ -31,7 +31,7 @@
     <td><%= calculation.call_num_start %></td>
     <td><%= calculation.call_num_end %></td>
     <td>
-    <% if calculation.result %>
+    <% if calculation.result && (calculation.result.estimated_feet || calculation.result.total_records) %>
         <%= calculation.result.estimated_feet ? calculation.result.estimated_feet : calculation.result.total_width_in_ft.round(1) %>
     <% end %>
     </td>

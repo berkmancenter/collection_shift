@@ -2,21 +2,28 @@
 <div class="well well-lg">
     <h2 data-toggle="collapse" data-target="#input-data">Input</h2>
     <dl id="input-data" class="dl-horizontal collapse in">
-        <% if @result.estimated_feet %>
-            <dt>Estimated Feet</dt><dd><%= number_field_tag :estimated_feet, @result.estimated_feet, id: 'estimated-feet', class: 'real-time form-control', in: (0..1000), step: 0.1 %></dd>
-        <% else %>
+      <div class="row">
+        <% unless @result.estimated_feet %>
+          <div class="col-md-6">
             <dt>Library code</dt><dd><%= @calculation.library_code %></dd>
             <dt>Collection code</dt><dd><%= @calculation.collection_code %></dd>
             <dt>Call num start</dt><dd><%= @calculation.call_num_start %></dd>
             <dt>Call num end</dt><dd><%= @calculation.call_num_end %></dd>
+          </div>
         <% end %>
-        <dt>Travel time</dt><dd><%= number_field_tag :travel_time, @calculation.travel_time, id: 'travel-time', class: 'real-time form-control', in: (0..1000), step: 0.1 %></dd>
-        <dt>Feet moved per trip</dt><dd><%= number_field_tag :cm_per_trip, @calculation.avg_feet_moved_per_trip, id: 'cm-per-trip', class: 'real-time form-control', in: (0..1000), step: 0.1 %>
-        <dt>Load time</dt><dd><%= number_field_tag :load_time, @calculation.load_time, id: 'load-time', class: 'real-time form-control', in: (0..1000), step: 0.1 %>
-        <dt>Unload time</dt><dd><%= number_field_tag :unload_time, @calculation.unload_time, id: 'unload-time', class: 'real-time form-control', in: (0..1000), step: 0.1 %>
+        <div class="col-md-6">
+          <% if @result.estimated_feet %>
+            <dt>Estimated Feet</dt><dd><%= number_field_tag :estimated_feet, @result.estimated_feet, id: 'estimated-feet', class: 'real-time form-control', in: (0..1000), step: 0.1 %></dd>
+          <% end %>
+          <dt>Travel time</dt><dd><%= number_field_tag :travel_time, @calculation.travel_time, id: 'travel-time', class: 'real-time form-control', in: (0..1000), step: 0.1 %></dd>
+          <dt>Feet moved per trip</dt><dd><%= number_field_tag :cm_per_trip, @calculation.avg_feet_moved_per_trip, id: 'cm-per-trip', class: 'real-time form-control', in: (0..1000), step: 0.1 %></dd>
+          <dt>Load time</dt><dd><%= number_field_tag :load_time, @calculation.load_time, id: 'load-time', class: 'real-time form-control', in: (0..1000), step: 0.1 %></dd>
+          <dt>Unload time</dt><dd><%= number_field_tag :unload_time, @calculation.unload_time, id: 'unload-time', class: 'real-time form-control', in: (0..1000), step: 0.1 %></dd>
+        </div>
+      </div>
     </dl>
     <h2>Results</h2>
-    <h3 class="overview text-primary" id="total-time"></h3>
+    <h3 class="overview text-danger" id="total-time"></h3>
     <% unless @result.estimated_feet %><h3 class="overview" id="total-items">~<%= @result.total_records %> items</h3><% end %>
     <h3 class="overview" id="total-feet">~<span id="feet"><%= @result.total_width_in_ft.round(1) %></span> linear feet</h3>
     <h3 class="overview" id="total-trips"></h3>
@@ -29,8 +36,21 @@
 </div>
 
 <% unless @result.estimated_feet %>
+
 <hr />
-<h2 data-toggle="collapse" data-target="#lib-cloud-data" class="toggler"><span class="glyphicon glyphicon-plus"></span>Library Cloud Data</h2>
+<h2 data-toggle="collapse" data-target="#charts" class="toggler"><span class="text-success glyphicon glyphicon-plus"></span>Charts</h2>
+<div id="charts" class="well well-lg collapse">
+    <h3>Record types</h3>
+    <%= pie_chart format_breakdown(@result) %>
+    <h3>Distribution of pages per record</h3>
+    <%= column_chart distribution(@result.pages, (0..1000).step(30).to_a) %>
+    <h3>Distribution of volumes per set</h3>
+    <%= column_chart distribution(@result.multi_volumes, (0..50).step(1).to_a) %>
+    <h3>Distribution of items per serial</h3>
+    <%= column_chart distribution(@result.serials, (0..100).step(1).to_a) %>
+</div>
+<hr />
+<h2 data-toggle="collapse" data-target="#lib-cloud-data" class="toggler"><span class="text-success glyphicon glyphicon-plus"></span>Library Cloud Data</h2>
 <dl id="lib-cloud-data" class="well well-lg dl-horizontal collapse">
     <dt>Total Records</dt><dd><%= @result.total_records %></dd>
     <dt>Total Books</dt><dd><%= @result.pages.count %></dd>
@@ -42,7 +62,7 @@
 </dl>
 
 <hr />
-<h2 data-toggle="collapse" data-target="#derived" class="toggler"><span class="glyphicon glyphicon-plus"></span>Derived Stats</h2>
+<h2 data-toggle="collapse" data-target="#derived" class="toggler"><span class="text-success glyphicon glyphicon-plus"></span>Derived Stats</h2>
 <dl id="derived" class="well well-lg dl-horizontal collapse">
     <dt>Total page width</dt>
     <dd><%= @result.pages_to_cm.round(2) %>cm</dd>
@@ -65,19 +85,6 @@
     <dt>Total Width<dt>
     <dd><%= @result.total_width.round(2) %>cm (<%= @result.total_width_in_ft.round(2) %>ft) (<%= @result.total_width_in_inches.round(2) %>")</dt>
 </dl>
-
-<hr />
-<h2 data-toggle="collapse" data-target="#charts" class="toggler"><span class="glyphicon glyphicon-plus"></span>Charts</h2>
-<div id="charts" class="well well-lg collapse">
-    <h3>Record types</h3>
-    <%= pie_chart format_breakdown(@result) %>
-    <h3>Distribution of pages per record</h3>
-    <%= column_chart distribution(@result.pages, (0..1000).step(30).to_a) %>
-    <h3>Distribution of volumes per set</h3>
-    <%= column_chart distribution(@result.multi_volumes, (0..50).step(1).to_a) %>
-    <h3>Distribution of items per serial</h3>
-    <%= column_chart distribution(@result.serials, (0..100).step(1).to_a) %>
-</div>
 <% end %>
 
 
