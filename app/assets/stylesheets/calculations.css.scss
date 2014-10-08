@@ -1,9 +1,37 @@
 // Place all the styles related to the Calculations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+$blue: #4FC1E9;
+$green: #2FD708;
+
 .alert {
     margin-top: 20px;
 }
 .nav.nav-tabs {
     margin-bottom: 1.5em;
+}
+.logo {
+  margin: 0.6em auto;
+  text-align: center;
+  font-size: 4em;
+  font-weight: bold;
+  color: $green;
+  em {
+    color: $blue;
+  }
+}
+.app-desc {
+  -webkit-column-count: 2;
+  -webkit-column-gap: 5em;
+  font-size: 0.95em;
+  p {
+    margin-bottom: 1.4em;
+  }
+}
+.new-calc-btn-wrap {
+  text-align: center;
+  margin: 3em auto;
+  .new-calc-btn {
+    padding: 8px 24px;
+  }
 }

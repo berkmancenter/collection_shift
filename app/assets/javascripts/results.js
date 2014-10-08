@@ -66,3 +66,14 @@ function graphShiftPlan(shiftPlan) {
     $('#shift-plan').append('<div class="total-trip" title="Total Shift - ' + minutesToString(totalTime) + '">&nbsp;</div>');
     $('.shift-trip, .shift-action, .total-trip').tooltip();
 }
+$(function() {
+  var shownToIcon = { true: 'minus', false: 'plus' };
+
+  $('.collapse').on('show.bs.collapse hide.bs.collapse', function(e) {
+    var shown = e.type == 'show';
+    $('.toggler[data-target="#' + $(this).attr('id') + '"]')
+    .find('.glyphicon')
+    .removeClass('glyphicon-' + shownToIcon[!shown])
+    .addClass('glyphicon-' + shownToIcon[shown]);
+  });
+});

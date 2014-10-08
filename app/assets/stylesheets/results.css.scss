@@ -56,3 +56,16 @@ h3.overview {
 
 }
 
+$green: #2FD708;
+
+.toggler .glyphicon {
+  color: $green;
+  margin-right: 0.3em;
+  font-size: 0.8em;
+}
+
+.shift-title {
+  margin: 1em auto;
+  text-align: center;
+  font-weight: bold;
+}

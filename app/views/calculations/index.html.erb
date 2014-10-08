@@ -1,20 +1,25 @@
-<h1>Welcome to <strong>Collection<em>Shift</em></strong></h1>
-<p><strong>Collection<em>Shift</em></strong> is a tool to help plan the shifting of collections of library items (primarily books and serials) from one shelf space to another.</p>
+<h1 class="logo">Collection<em>Shift</em></h1>
+<div class="app-desc">
+<p><strong>Collection<em>Shift</em> is a tool to help plan the shifting of collections of library items (primarily books and serials) from one shelf space to another.</strong></p>
 <p>Simply enter the library code, collection code, and the call number range for the items you&apos;re looking to move, plus a few other bits of data, and we&apos;ll put together an estimate of the number of person-hours required to complete your shift.</p> 
 <p>Right now, we're limited to Library of Congress call number ranges, so this tool won&apos;t work with other numbering schemes. We also rely heavily on data from <%= link_to 'LibraryCloud', 'http://librarycloud.harvard.edu/' %>, so if they&apos;re missing data about the records you&apos;re looking to shift, we won&apos;t be much help.</p>
 <p>Listed below are all the shift calculations that have been performed so far. Peruse them as examples, and when you&apos;re ready to calculate your own shift, click <%= link_to 'New Calculation', new_calculation_path %>.</p>
+</div>
+
+<div class="new-calc-btn-wrap">
+  <%= link_to 'New Calculation', new_calculation_path, class: 'new-calc-btn btn btn-primary' %>
+</div>
 
 <h2>Previous Calculations</h2>
 <div class="well">
-
 <table class="table">
   <tr>
     <th>Library code</th>
     <th>Collection code</th>
-    <th>Call num start</th>
-    <th>Call num end</th>
+    <th>First call number</th>
+    <th>Last call number</th>
     <th>Estimated Feet</th>
-    <th>Result</th>
+    <th></th>
     <!-- <th></th> -->
     <!-- <th></th> -->
   </tr>
@@ -40,8 +45,4 @@
   </tr>
 <% end %>
 </table>
-
-<br />
-
-<%= link_to 'New Calculation', new_calculation_path %>
 </div>
